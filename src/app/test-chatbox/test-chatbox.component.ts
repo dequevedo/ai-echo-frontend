@@ -11,30 +11,21 @@ import { ChatService } from '../services/chat/chat.service';
   templateUrl: './test-chatbox.component.html',
   styleUrl: './test-chatbox.component.scss'
 })
-export class TestChatboxComponent implements OnInit{
-
+export class TestChatboxComponent implements OnInit {
   title = 'audio-record';
-  record: any;
   recording = false;
   audioUrl: any;
-  error: any;
   private RecordRTC: any;
-
-  userMessage = 'Tell me a very very short story about a frog';
-  responseMessage = '';
+  private record: any;
+  private stream!: MediaStream;
 
   constructor(private domSanitizer: DomSanitizer, private chatService: ChatService) {}
 
   async ngOnInit() {
-    // Importa RecordRTC apenas no cliente
     if (typeof window !== 'undefined') {
       const RecordRTC = await import('recordrtc');
       this.RecordRTC = RecordRTC.default || RecordRTC;
     }
-  }
-
-  sanitize(url: string) {
-    return this.domSanitizer.bypassSecurityTrustUrl(url);
   }
 
   async startRecording() {
@@ -44,74 +35,56 @@ export class TestChatboxComponent implements OnInit{
     }
 
     this.recording = true;
-    let mediaConstraints = {
-      video: false,
-      audio: true
-    };
 
-    navigator.mediaDevices
-      .getUserMedia(mediaConstraints)
-      .then(this.successCallback.bind(this), this.errorCallback.bind(this));
-  }
+    try {
+      this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-  successCallback(stream: any) {
-    if (!this.RecordRTC) {
-      console.error('RecordRTC não foi carregado corretamente.');
-      return;
+      this.record = new this.RecordRTC.StereoAudioRecorder(this.stream, {
+        mimeType: 'audio/wav',
+        numberOfAudioChannels: 1,
+        sampleRate: 44100
+      });
+
+      this.record.record(); // 🔥 Corrigido: Método correto para iniciar a gravação
+    } catch (error) {
+      console.error('Erro ao acessar o microfone:', error);
     }
-
-    var options = {
-      mimeType: 'audio/wav' as 'audio/wav'
-    };
-    var StereoAudioRecorder = this.RecordRTC.StereoAudioRecorder;
-    this.record = new StereoAudioRecorder(stream, options);
-    this.record.record();
   }
 
-  stopRecording() {
+  async stopRecording() {
     if (!this.record) {
       console.error('Nenhuma gravação em andamento.');
       return;
     }
 
-    this.record.stop((blob: Blob) => {
-      this.processRecording(blob);
+    this.recording = false;
 
-      // Para liberar os recursos do MediaStream
-      if (this.record.stream) {
-        this.record.stream.getTracks().forEach((track: MediaStreamTrack) => track.stop());
-      }
+    try {
+      this.record.stop((blob: Blob) => { // 🔥 Corrigido: Método correto para parar a gravação e obter o Blob
+        if (!blob) {
+          console.error('Erro: Blob inválido.');
+          return;
+        }
 
-      // Resetando para evitar chamadas inválidas
-      this.record = null;
-      this.recording = false;
-    });
+        this.audioUrl = URL.createObjectURL(blob);
+        this.sendAudioToText(blob);
 
-    this.sendMessage();
+        // Libera os recursos do microfone
+        this.stream.getTracks().forEach(track => track.stop());
+      });
+    } catch (error) {
+      console.error('Erro ao parar a gravação:', error);
+    }
   }
 
-  processRecording(blob: Blob | MediaSource) {
-    this.audioUrl = window.URL.createObjectURL(blob);
-    console.log('blob', blob);
-    console.log('url', this.audioUrl);
-  }
-
-  errorCallback(_error: any) {
-    this.error = 'Can not play audio in your browser';
-  }
-
-  sendMessage() {
-    // if (!this.userMessage.trim()) return;
-
-    this.chatService.sendMessage(this.userMessage).subscribe(
-      (response) => {
-        this.responseMessage = response.message; // Supondo que o backend retorna um campo `message`
-        this.userMessage = ''; // Limpa o campo de input
-        console.log(response.message);
-      },
-      (error) => {
-        console.error('Erro ao enviar mensagem:', error);
-      }
+  sendAudioToText(blob: Blob) {
+    this.chatService.sendAudioToText(blob).subscribe(
+      (response) => console.log('Resposta da transcrição:', response),
+      (error) => console.error('Erro ao enviar áudio:', error)
     );
+  }
+
+  sanitize(url: string) {
+    return this.domSanitizer.bypassSecurityTrustUrl(url);
   }
 }
