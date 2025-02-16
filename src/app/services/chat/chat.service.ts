@@ -8,6 +8,8 @@ import { Observable } from 'rxjs';
 export class ChatService {
   private baseHost = 'http://localhost:8080';
 
+  aiAnswer = ''
+
   constructor(private http: HttpClient) {}
 
   sendChat(message: string): Observable<any> {
@@ -31,6 +33,29 @@ export class ChatService {
     formData.append('file', audioFile, 'audio.wav');
 
     return this.http.post<any>(`${this.baseHost}/voice-to-text`, formData);
+  }
+
+  sendTextToVoice(text: string): Observable<Blob> {
+    return new Observable(observer => {
+      this.sendChat(text).subscribe(
+        (response) => {
+          console.log('Resposta do AI:', response.message);
+
+          const body = {
+            input: response.message
+          };
+
+          this.http.post(`${this.baseHost}/text-to-voice`, body, { responseType: 'blob' }).subscribe(
+            (audioBlob) => {
+              observer.next(audioBlob);
+              observer.complete();
+            },
+            (error) => observer.error(error)
+          );
+        },
+        (error) => observer.error(error)
+      );
+    });
   }
 
 }

@@ -13,7 +13,9 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './test-chatbox.component.scss'
 })
 export class TestChatboxComponent implements OnInit {
-  inputText: string = ''
+  inputText: string = '';
+  
+  speechAudioUrl: any; // Armazena o áudio convertido
 
   title = 'audio-record';
   recording = false;
@@ -84,12 +86,29 @@ export class TestChatboxComponent implements OnInit {
       (response) => {
         console.log('Resposta da transcrição:', response);
         this.inputText = response.text || response;
+        this.convertTextToSpeech();
       },
       (error) => console.error('Erro ao enviar áudio:', error)
     );
   }
 
-  sanitize(url: string) {
-    return this.domSanitizer.bypassSecurityTrustUrl(url);
+  convertTextToSpeech() {
+    if (!this.inputText.trim()) {
+      console.error('Erro: Nenhum texto para conversão.');
+      return;
+    }
+
+    this.chatService.sendTextToVoice(this.inputText).subscribe(
+      (audioBlob) => {
+        const audioUrl = URL.createObjectURL(audioBlob);
+        this.speechAudioUrl = audioUrl;
+
+        console.log('Áudio gerado:', audioUrl);
+
+        const audio = new Audio(audioUrl);
+        audio.play();
+      },
+      (error) => console.error('Erro ao converter texto para voz:', error)
+    );
   }
 }
