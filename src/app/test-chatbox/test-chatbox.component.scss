@@ -1,0 +1,23 @@
+@import '../../styles.scss';
+
+input {
+  padding: 10px 20px;
+  margin: 0px;
+
+  background-color: $primary;
+  color: $very-dark;
+
+  border: solid;
+  border-radius: 30px 30px 30px 2px;
+  font-size: 16px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  width: 100%;
+  box-sizing: border-box;
+
+  cursor: pointer;
+
+  &::placeholder {
+    color: #ffffff;
+    opacity: 1;
+  }
+}

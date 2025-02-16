@@ -1,0 +1,24 @@
+/* SCSS Colors */
+$primary: #60495a;
+$secondary: #3f3244;
+$dark: #2f2235;
+$very-dark: #130d16;
+$light-primary: #bfc3ba;
+$light-secondary: #a9aca9;
+
+/* SCSS Gradients */
+$gradient-top: linear-gradient(0deg, $light-primary, $light-secondary, $primary, $secondary, $dark);
+$gradient-right: linear-gradient(90deg, $light-primary, $light-secondary, $primary, $secondary, $dark);
+$gradient-bottom: linear-gradient(180deg, $light-primary, $light-secondary, $primary, $secondary, $dark);
+$gradient-left: linear-gradient(270deg, $light-primary, $light-secondary, $primary, $secondary, $dark);
+$gradient-top-right: linear-gradient(45deg, $light-primary, $light-secondary, $primary, $secondary, $dark);
+$gradient-bottom-right: linear-gradient(135deg, $light-primary, $light-secondary, $primary, $secondary, $dark);
+$gradient-top-left: linear-gradient(225deg, $light-primary, $light-secondary, $primary, $secondary, $dark);
+$gradient-bottom-left: linear-gradient(315deg, $light-primary, $light-secondary, $primary, $secondary, $dark);
+$gradient-radial: radial-gradient($light-primary, $light-secondary, $primary, $secondary, $dark);
+
+
+body {
+  background-color: $dark; // Altere para a cor desejada
+  color: #333; // Cor do texto para melhor contraste
+}
