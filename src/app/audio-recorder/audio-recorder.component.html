@@ -20,8 +20,8 @@
     />
   </div>
 
-  <audio class="audio-file" controls *ngIf="url">
-    <source [src]="sanitize(url)" type="audio/wav" />
+  <audio class="audio-file" controls *ngIf="audioUrl">
+    <source [src]="sanitize(audioUrl)" type="audio/wav" />
   </audio>
 
 </div>

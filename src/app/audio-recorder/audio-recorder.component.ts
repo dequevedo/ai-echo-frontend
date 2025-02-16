@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
-import * as RecordRTC from 'recordrtc';
 
 @Component({
   selector: 'app-audio-recorder',
@@ -10,21 +9,35 @@ import * as RecordRTC from 'recordrtc';
   templateUrl: './audio-recorder.component.html',
   styleUrl: './audio-recorder.component.scss'
 })
-export class AudioRecorderComponent {
+export class AudioRecorderComponent implements OnInit {
 
   title = 'audio-record';
   record: any;
   recording = false;
-  url: any;
+  audioUrl: any;
   error: any;
+  private RecordRTC: any; // Variável para armazenar a referência do RecordRTC
 
   constructor(private domSanitizer: DomSanitizer) {}
+
+  async ngOnInit() {
+    // Importa RecordRTC apenas no cliente
+    if (typeof window !== 'undefined') {
+      const RecordRTC = await import('recordrtc');
+      this.RecordRTC = RecordRTC.default || RecordRTC;
+    }
+  }
 
   sanitize(url: string) {
     return this.domSanitizer.bypassSecurityTrustUrl(url);
   }
 
-  startRecording() {
+  async startRecording() {
+    if (!this.RecordRTC) {
+      console.error('RecordRTC não foi carregado corretamente.');
+      return;
+    }
+
     this.recording = true;
     let mediaConstraints = {
       video: false,
@@ -37,10 +50,15 @@ export class AudioRecorderComponent {
   }
 
   successCallback(stream: any) {
-    var options: RecordRTC.Options = {
+    if (!this.RecordRTC) {
+      console.error('RecordRTC não foi carregado corretamente.');
+      return;
+    }
+
+    var options = {
       mimeType: 'audio/wav' as 'audio/wav'
     };
-    var StereoAudioRecorder = RecordRTC.StereoAudioRecorder;
+    var StereoAudioRecorder = this.RecordRTC.StereoAudioRecorder;
     this.record = new StereoAudioRecorder(stream, options);
     this.record.record();
   }
@@ -51,13 +69,12 @@ export class AudioRecorderComponent {
   }
 
   processRecording(blob: Blob | MediaSource) {
-    this.url = URL.createObjectURL(blob);
+    this.audioUrl = window.URL.createObjectURL(blob);
     console.log('blob', blob);
-    console.log('url', this.url);
+    console.log('url', this.audioUrl);
   }
 
   errorCallback(error: any) {
     this.error = 'Can not play audio in your browser';
   }
-
 }
