@@ -27,7 +27,7 @@ export class ChatService {
       });
     }
 
-    console.log('Enviando áudio para transcrição...', audioFile);
+    console.log('Enviando áudio para transcrição...');
 
     const formData = new FormData();
     formData.append('file', audioFile, 'audio.wav');
@@ -39,7 +39,7 @@ export class ChatService {
     return new Observable(observer => {
       this.sendChat(text).subscribe(
         (response) => {
-          console.log('Resposta do AI:', response.message);
+          console.log('Resposta da AI:', response.message);
 
           const body = {
             input: response.message

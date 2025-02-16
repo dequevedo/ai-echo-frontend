@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class TestChatboxComponent implements OnInit {
   inputText: string = '';
-  
+
   speechAudioUrl: any; // Armazena o áudio convertido
 
   title = 'audio-record';
@@ -103,7 +103,7 @@ export class TestChatboxComponent implements OnInit {
         const audioUrl = URL.createObjectURL(audioBlob);
         this.speechAudioUrl = audioUrl;
 
-        console.log('Áudio gerado:', audioUrl);
+        console.log('Áudio gerado.');
 
         const audio = new Audio(audioUrl);
         audio.play();
