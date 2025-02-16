@@ -21,4 +21,38 @@ body {
   background: $gradient-radial;
   color: #333;
   min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative; // Necessário para o ::before
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  width: 800px;
+  height: 800px;
+  border: 300px solid $secondary;
+  border-radius: 100%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.8;
+  animation: pulse 8s infinite ease-in-out;
+  z-index: -1;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(.7);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.0);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(.7);
+    opacity: 0.2;
+  }
 }
