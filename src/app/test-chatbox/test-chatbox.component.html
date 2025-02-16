@@ -1,5 +1,5 @@
 <div class="chatbox">
-  <input type="text" id="nome" name="nome" placeholder="Escreva algo..." autocomplete="off">
+  <input type="text" id="nome" name="nome" placeholder="Escreva algo..." autocomplete="off" [(ngModel)]="inputText">
 
   <img
     *ngIf="!recording"
@@ -15,7 +15,3 @@
     (click)="stopRecording()"
   />
 </div>
-
-<audio class="audio-file" controls *ngIf="audioUrl">
-  <source [src]="sanitize(audioUrl)" type="audio/wav" />
-</audio>
