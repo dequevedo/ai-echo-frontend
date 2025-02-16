@@ -1,2 +1,21 @@
-<input type="text" id="nome" name="nome" placeholder="Escreva algo..." autocomplete="off">
+<div class="chatbox">
+  <input type="text" id="nome" name="nome" placeholder="Escreva algo..." autocomplete="off">
 
+  <img
+    *ngIf="!recording"
+    src="assets/mic-icon.svg"
+    class="mic-icon"
+    (click)="startRecording()"
+  />
+
+  <img
+    *ngIf="recording"
+    src="assets/mic-icon.svg"
+    class="mic-icon recording"
+    (click)="stopRecording()"
+  />
+</div>
+
+<audio class="audio-file" controls *ngIf="audioUrl">
+  <source [src]="sanitize(audioUrl)" type="audio/wav" />
+</audio>

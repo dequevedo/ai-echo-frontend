@@ -1,5 +1,63 @@
 @import '../../styles.scss';
 
+.chatbox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  input {
+    padding: 10px 20px;
+    padding-right: 50px;
+    margin: 0;
+    background-color: $primary;
+    color: $very-dark;
+    border: solid;
+    border-radius: 30px 30px 30px 2px;
+    font-size: 16px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: #ffffff;
+      opacity: 1;
+    }
+  }
+
+  .mic-icon {
+    position: absolute;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  .recording {
+    animation: pulse 1.5s infinite;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 input {
   padding: 10px 20px;
   margin: 0px;
