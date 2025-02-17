@@ -1,0 +1,37 @@
+@import '../../../styles.scss';
+
+.chatbubble {
+  position: fixed;
+  display: inline-block;
+  align-items: center;
+
+  max-width: 60%; // Evita que o bubble fique muito largo
+  min-width: 50px;
+  padding: 10px 20px;
+  background-color: $light-primary;
+  color: $very-dark;
+  border-radius: 30px 30px 2px 30px;
+  font-size: 16px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+  white-space: normal;
+  word-wrap: break-word;
+
+  opacity: 0; // Começa invisível
+  transform: translateY(50px); // Começa ligeiramente abaixo
+  animation: appear-and-move 1s ease-out forwards;
+}
+
+@keyframes appear-and-move {
+  0% {
+    opacity: 0;
+    transform: translateY(50px); // Posição inicial abaixo
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-500px); // Move para a posição final
+  }
+}

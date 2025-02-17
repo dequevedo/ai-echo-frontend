@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ChatService } from '../services/chat/chat.service';
-import { RecordingService } from '../services/recording/recording.service';
+import { ChatService } from '../../services/chat/chat.service';
+import { RecordingService } from '../../services/recording/recording.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
