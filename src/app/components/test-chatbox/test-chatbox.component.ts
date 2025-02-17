@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './test-chatbox.component.scss'
 })
 export class TestChatboxComponent implements OnInit {
-  inputText: string = '';
+  chatboxTextValue: string = '';
   speechAudioUrl: string | null = null;
   recording = false;
   audioUrl: string | null = null;
@@ -45,7 +45,7 @@ export class TestChatboxComponent implements OnInit {
   private transcribeAudio(blob: Blob) {
     this.chatService.transcribeAudio(blob).subscribe(
       (response) => {
-        this.inputText = response.text || response;
+        this.chatboxTextValue = response.text || response;
         this.convertTextToSpeech();
       },
       (error) => console.error('Erro ao enviar áudio:', error)
@@ -53,9 +53,9 @@ export class TestChatboxComponent implements OnInit {
   }
 
   private convertTextToSpeech() {
-    if (!this.inputText.trim()) return console.error('Erro: Nenhum texto para conversão.');
+    if (!this.chatboxTextValue.trim()) return console.error('Erro: Nenhum texto para conversão.');
 
-    this.chatService.convertTextToSpeech(this.inputText).subscribe(
+    this.chatService.convertTextToSpeech(this.chatboxTextValue).subscribe(
       (audioBlob) => {
         this.speechAudioUrl = URL.createObjectURL(audioBlob);
         new Audio(this.speechAudioUrl).play();
