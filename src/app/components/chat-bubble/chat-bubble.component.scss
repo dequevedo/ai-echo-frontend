@@ -5,7 +5,7 @@
   display: inline-block;
   align-items: center;
 
-  max-width: 60%; // Evita que o bubble fique muito largo
+  max-width: 60%;
   min-width: 50px;
   padding: 10px 20px;
 
@@ -35,6 +35,6 @@
   }
   100% {
     opacity: 1;
-    transform: translateY(-500px); // Move para a posição final
+    transform: translateY(-500px);
   }
 }

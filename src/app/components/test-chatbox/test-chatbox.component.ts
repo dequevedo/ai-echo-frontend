@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ChatService } from '../../services/chat/chat.service';
 import { RecordingService } from '../../services/recording/recording.service';
 import { FormsModule } from '@angular/forms';
@@ -20,7 +19,6 @@ export class TestChatboxComponent implements OnInit {
   audioUrl: string | null = null;
 
   constructor(
-    private domSanitizer: DomSanitizer,
     private chatService: ChatService,
     private recordingService: RecordingService
   ) {}
